@@ -5,17 +5,17 @@ pipeline {
     }
     environment {
         CI = 'true'
+        DOTNET_RUNNING_IN_CONTAINER = 'true'
     }
     stages {
         stage('Sanity Check') {
             steps {
-                sh 'sleep 10; echo "Linting";curl -o Directory.Build.props https://raw.githubusercontent.com/dotnet/dotnet-docker/master/samples/Directory.Build.props
-'
+                sh 'echo "Linting"; sleep 10;'
             }
         }
         stage('Unit Test') {
             steps {
-                sh 'docker run --rm -v ${pwd}:/app -w /app/tests mcr.microsoft.com/dotnet/core/sdk:3.1 dotnet test'
+                sh 'docker run --rm -v ${pwd}/samples/complexapp:/app -w /app/tests mcr.microsoft.com/dotnet/core/sdk:3.1 dotnet test'
             }
         }
         stage('Test and Audit') {
