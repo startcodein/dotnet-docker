@@ -15,7 +15,7 @@ pipeline {
         }
         stage('Unit Test') {
             steps {
-                sh 'docker run --rm -v ./samples/complexapp:/app -w /app/tests mcr.microsoft.com/dotnet/core/sdk:3.1 dotnet test'
+                sh 'docker run --rm -v ${PWD}/samples/complexapp:/app -w /app/tests mcr.microsoft.com/dotnet/core/sdk:3.1 dotnet test'
             }
         }
         stage('Test and Audit') {
