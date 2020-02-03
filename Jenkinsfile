@@ -8,9 +8,10 @@ pipeline {
         DOTNET_RUNNING_IN_CONTAINER = 'true'
     }
     stages {
-        stage('CleanWorkspace') {          
+        stage('Preparing Workspace') {          
             steps {
-                cleanWs()               
+                cleanWs()
+                sh 'cp ${PWD}/samples/Directory.Build.props ${PWD}/samples/complexapp/'
             }
         }
         stage('Sanity Check') {
