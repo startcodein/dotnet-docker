@@ -9,8 +9,7 @@ pipeline {
     }
     stages {
         stage('Preparing Workspace') {          
-            steps {
-                cleanWs()
+            steps {               
                 sh 'cp ${PWD}/samples/Directory.Build.props ${PWD}/samples/complexapp/'
             }
         }
