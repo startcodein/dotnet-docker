@@ -10,8 +10,7 @@ pipeline {
     stages {
         stage('Preparing Workspace') {          
             steps {               
-                sh 'cp ${PWD}/samples/Directory.Build.props ${PWD}/samples/complexapp/'
-                sh 'docker run -u 1001 --rm -v ${PWD}/samples/complexapp:/app -w /app/tests mcr.microsoft.com/dotnet/core/sdk:3.1 dotnet clean'
+                sh 'cp ${PWD}/samples/Directory.Build.props ${PWD}/samples/complexapp/'               
             }
         }
         stage('Sanity Check') {
