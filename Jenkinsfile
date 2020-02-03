@@ -10,8 +10,7 @@ pipeline {
     stages {
         stage('Preparing Workspace') {          
             steps {               
-                sh 'cp ${PWD}/samples/Directory.Build.props ${PWD}/samples/complexapp/'
-                sh 'docker run --rm -v ${PWD}/samples/complexapp:/app -w /app/tests mcr.microsoft.com/dotnet/core/sdk:3.1 dotnet clean'                                
+                sh 'cp ${PWD}/samples/Directory.Build.props ${PWD}/samples/complexapp/'                                                
             }
         }
         stage('Sanity Check') {
@@ -26,12 +25,12 @@ pipeline {
         }
         stage('Build') {         
            steps {
-                sh 'docker run --rm -v ${PWD}/samples/complexapp:/app -w /app/tests mcr.microsoft.com/dotnet/core/sdk:3.1 dotnet build -c release --no-restore'
-                sh 'sudo chmod -R 777 ${PWD}'
+                sh 'docker run --rm -v ${PWD}/samples/complexapp:/app -w /app/tests mcr.microsoft.com/dotnet/core/sdk:3.1 dotnet build -c release --no-restore'                
            }
         }
         stage('Deliver') {
             steps {
+                sh 'docker run --rm -v ${PWD}/samples/complexapp:/app -w /app/tests mcr.microsoft.com/dotnet/core/sdk:3.1 dotnet clean'
                 sh './jenkins/scripts/deliver.sh'
                 sh './jenkins/scripts/validate.sh'
                 input message: 'Kill the process ? (Click "Proceed" to continue)'
