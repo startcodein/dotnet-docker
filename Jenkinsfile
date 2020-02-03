@@ -8,9 +8,9 @@ pipeline {
         DOTNET_RUNNING_IN_CONTAINER = 'true'
     }
     stages {
-        stage('CleanWorkspace') {
+        stage('CleanWorkspace') {          
             steps {
-                cleanWs()
+                cleanWs()               
             }
         }
         stage('Sanity Check') {
@@ -26,6 +26,7 @@ pipeline {
         stage('Build') {         
            steps {
                 sh 'docker run --rm -v ${PWD}/samples/complexapp:/app -w /app/tests mcr.microsoft.com/dotnet/core/sdk:3.1 dotnet build -c release --no-restore'
+                sh 'sudo chmod -R 777 ${PWD}'
            }
         }
         stage('Deliver') {
