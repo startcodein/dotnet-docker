@@ -8,9 +8,14 @@ pipeline {
         DOTNET_RUNNING_IN_CONTAINER = 'true'
     }
     stages {
+        stage('CleanWorkspace') {
+            steps {
+                cleanWs()
+            }
+        }
         stage('Sanity Check') {
             steps {
-                sh 'echo "Linting"; sleep 10;'
+                sh 'echo "Linting"; sleep 10;'               
             }
         }
         stage('Unit Test') {
