@@ -18,20 +18,10 @@ pipeline {
                 sh 'docker run --rm -v ${PWD}/samples/complexapp:/app -w /app/tests mcr.microsoft.com/dotnet/core/sdk:3.1 dotnet test'
             }
         }
-        stage('Test and Audit') {
-            failFast true
-            parallel {
-              stage('Test') {
-                steps {
-                    sh './jenkins/scripts/test.sh'
-                }
-              }
-              stage('Audit') {
-                steps {
-                    sh './jenkins/scripts/audit.sh'
-                }
-              }
-            }
+        stage('Build') {         
+           steps {
+                sh 'docker run --rm -v ${PWD}/samples/complexapp:/app -w /app/tests mcr.microsoft.com/dotnet/core/sdk:3.1 dotnet build -c release --no-restore'
+           }
         }
         stage('Deliver') {
             steps {
