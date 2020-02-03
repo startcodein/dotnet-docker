@@ -10,7 +10,6 @@ pipeline {
     stages {
         stage('Preparing Workspace') {          
             steps {               
-                sh 'sudo chown -R builder ${PWD}'    
                 sh 'cp ${PWD}/samples/Directory.Build.props ${PWD}/samples/complexapp/'               
             }
         }
@@ -21,14 +20,12 @@ pipeline {
         }
         stage('Unit Test') {
             steps {
-                sh 'sudo chown -R builder ${PWD}'    
-                sh 'docker run -u 1001  --rm -v ${PWD}/samples/complexapp:/app -w /app/tests mcr.microsoft.com/dotnet/core/sdk:3.1 dotnet test'
+                sh 'docker run --rm -v ${PWD}/samples/complexapp:/app -w /app/tests mcr.microsoft.com/dotnet/core/sdk:3.1 dotnet test'
             }
         }
         stage('Build') {         
            steps {
-                sh 'sudo chown -R builder ${PWD}'    
-                sh 'docker run -u 1001 --rm -v ${PWD}/samples/complexapp:/app -w /app/tests mcr.microsoft.com/dotnet/core/sdk:3.1 dotnet build -c release --no-restore'                
+                sh 'docker run --rm -v ${PWD}/samples/complexapp:/app -w /app/tests mcr.microsoft.com/dotnet/core/sdk:3.1 dotnet build -c release --no-restore'                
            }
         }
         stage('Deliver') {
