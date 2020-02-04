@@ -1,0 +1,49 @@
+version: '3'
+services:
+  jenkins:
+    image: jenkinsci/blueocean
+    environment:
+      JAVA_OPTS: "-Djava.awt.headless=true"
+      #JENKINS_OPTS: "--prefix=/jenkins"
+      DOCKER_HOST: "tcp://docker:2376"
+      DOCKER_CERT_PATH: "/certs/client"
+      DOCKER_TLS_VERIFY: "1"
+    restart: always
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - /opt/cicd/data-blue/jenkins_home:/var/jenkins_home
+      - /opt/cicd/data-blue/jenkins_certs:/certs/client
+    networks:
+      - jenkins
+  sonar:
+    image: sonarqube
+    restart: always
+    ports:
+      - "9000:9000"
+    volumes:
+      - /opt/cicd/sonar/sonarqube_conf:/opt/sonarqube/conf
+      - /opt/cicd/sonar/sonarqube_data:/opt/sonarqube/data
+      - /opt/cicd/sonar/sonarqube_logs:/opt/sonarqube/logs
+      - /opt/cicd/sonar/sonarqube_extenstions:/opt/sonarqube/extenstions
+    networks:
+      - jenkins
+
+  jenkins-docker:
+    image: docker:dind
+    privileged: true
+    environment:
+      DOCKER_TLS_CERTDIR: "/certs"
+    restart: always
+    volumes:
+      - /opt/cicd/data-blue/jenkins_home:/var/jenkins_home
+      - /opt/cicd/data-blue/jenkins_certs:/certs/client
+    ports:
+      - "2376:2376"
+    networks:
+      jenkins:
+        aliases:
+          - docker
+networks:
+  jenkins: {}
