@@ -6,7 +6,7 @@ pipeline {
     environment {
         CI = 'true'
         DOTNET_RUNNING_IN_CONTAINER = 'true'
-        EMAIL_TO = 'ksraju007@gmail.com'
+        EMAIL_TO = 'distribution@example.com'
     }
     stages {
         stage('Sanity Check') {
