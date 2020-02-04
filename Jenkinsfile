@@ -20,7 +20,7 @@ pipeline {
         }
         stage('Build') {         
            steps {
-                sh 'cd ${PWD}/samples/complexapp/tests  dotnet build -c release --no-restore'                
+                sh 'cd ${PWD}/samples/complexapp/tests ; dotnet build -c release --no-restore'                
            }
         }
         stage('Deliver') {
