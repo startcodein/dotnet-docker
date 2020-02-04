@@ -1,18 +1,13 @@
 
 pipeline {
     agent {
-        node { label 'build_host' }
+        node { label 'dotnet' }
     }
     environment {
         CI = 'true'
         DOTNET_RUNNING_IN_CONTAINER = 'true'
     }
     stages {
-        stage('Preparing Workspace') {          
-            steps {               
-                sh 'cp ${PWD}/samples/Directory.Build.props ${PWD}/samples/complexapp/'               
-            }
-        }
         stage('Sanity Check') {
             steps {
                 sh 'echo "Linting"; sleep 10;'               
@@ -20,12 +15,12 @@ pipeline {
         }
         stage('Unit Test') {
             steps {
-                sh 'docker run --rm -v ${PWD}/samples/complexapp:/app -w /app/tests mcr.microsoft.com/dotnet/core/sdk:3.1 dotnet test'
+                sh 'cd  ${PWD}/samples/complexapp/tests ; dotnet test'
             }
         }
         stage('Build') {         
            steps {
-                sh 'docker run --rm -v ${PWD}/samples/complexapp:/app -w /app/tests mcr.microsoft.com/dotnet/core/sdk:3.1 dotnet build -c release --no-restore'                
+                sh 'cd ${PWD}/samples/complexapp/tests  dotnet build -c release --no-restore'                
            }
         }
         stage('Deliver') {
