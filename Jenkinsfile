@@ -11,7 +11,7 @@ pipeline {
     stages {
         stage('Sanity Check') {
             steps {
-                sh 'echo "Linting"; sleep 10;'               
+                sh 'echo "Linting"; sleep 10;'
             }
         }
         stage('Unit Test') {
@@ -19,36 +19,36 @@ pipeline {
                 sh 'cd  ${PWD}/samples/complexapp/tests ; dotnet test'
             }
         }
-        stage('Build') {         
+        stage('Build') {
            steps {
-                sh 'cd ${PWD}/samples/complexapp/tests ; dotnet build -c release --no-restore'                
+                sh 'cd ${PWD}/samples/complexapp/tests ; dotnet build -c release --no-restore'
            }
         }
         stage('Deliver') {
-            steps {                
+            steps {
                 sh 'env'
                 }
         }
-        stage('Notification') {
-            steps {                
-                sh 'echo "email will be sent to ${EMAIL_TO}" ; sleep 2'
+        stage('CodeAnalysis') {
+            steps {
+                sh 'cd ${PWD}/samples/complexapp/tests ; /opt/sonar-scanner-4.2.0.1873-linux/bin/sonar-scanner '
                 }
         }
     }
     post {
         failure {
-            emailext body: 'Check console output at $BUILD_URL to view the results. \n\n ${CHANGES} \n\n -------------------------------------------------- \n${BUILD_LOG, maxLines=100, escapeHtml=false}', 
-                    to: "${EMAIL_TO}", 
+            emailext body: 'Check console output at $BUILD_URL to view the results. \n\n ${CHANGES} \n\n -------------------------------------------------- \n${BUILD_LOG, maxLines=100, escapeHtml=false}',
+                    to: "${EMAIL_TO}",
                     subject: 'Build failed in Jenkins: $PROJECT_NAME - #$BUILD_NUMBER'
         }
         unstable {
-            emailext body: 'Check console output at $BUILD_URL to view the results. \n\n ${CHANGES} \n\n -------------------------------------------------- \n${BUILD_LOG, maxLines=100, escapeHtml=false}', 
-                    to: "${EMAIL_TO}", 
+            emailext body: 'Check console output at $BUILD_URL to view the results. \n\n ${CHANGES} \n\n -------------------------------------------------- \n${BUILD_LOG, maxLines=100, escapeHtml=false}',
+                    to: "${EMAIL_TO}",
                     subject: 'Unstable build in Jenkins: $PROJECT_NAME - #$BUILD_NUMBER'
         }
         changed {
-            emailext body: 'Check console output at $BUILD_URL to view the results.', 
-                    to: "${EMAIL_TO}", 
+            emailext body: 'Check console output at $BUILD_URL to view the results.',
+                    to: "${EMAIL_TO}",
                     subject: 'Jenkins build is back to normal: $PROJECT_NAME - #$BUILD_NUMBER'
         }
     }
