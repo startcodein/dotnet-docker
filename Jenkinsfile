@@ -21,17 +21,17 @@ pipeline {
         }
         stage('Build') {
            steps {
-                sh 'cd ${PWD}/samples/complexapp/tests ; dotnet build -c release --no-restore'
+                sh 'cd ${PWD}/samples/complexapp ; dotnet build -c release --no-restore'
            }
-        }
-        stage('Deliver') {
-            steps {
-                sh 'env'
-                }
         }
         stage('CodeAnalysis') {
             steps {
                 sh './sonar.sh'
+                }
+        }
+        stage('Deliver') {
+            steps {
+                sh 'env ; echo this is a dummy step'
                 }
         }
     }
