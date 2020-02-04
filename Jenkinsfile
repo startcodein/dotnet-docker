@@ -29,6 +29,11 @@ pipeline {
                 sh 'env'
                 }
         }
+        stage('Notification') {
+            steps {                
+                sh 'echo "email will be sent to ${EMAIL_TO}" ; sleep 2'
+                }
+        }
     }
     post {
         failure {
