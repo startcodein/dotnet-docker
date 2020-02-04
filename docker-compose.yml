@@ -22,11 +22,11 @@ services:
     restart: always
     ports:
       - "9000:9000"
-    volumes:
-      - /opt/cicd/sonar/sonarqube_conf:/opt/sonarqube/conf
-      - /opt/cicd/sonar/sonarqube_data:/opt/sonarqube/data
-      - /opt/cicd/sonar/sonarqube_logs:/opt/sonarqube/logs
-      - /opt/cicd/sonar/sonarqube_extenstions:/opt/sonarqube/extenstions
+   volumes:
+      - sonarqube_conf:/opt/sonarqube/conf
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_logs:/opt/sonarqube/logs
+      - sonarqube_extensions:/opt/sonarqube/extensions
     networks:
       - jenkins
 
@@ -47,3 +47,9 @@ services:
           - docker
 networks:
   jenkins: {}
+
+volumes:
+  sonarqube_conf: {}
+  sonarqube_data: {}
+  sonarqube_logs: {}
+  sonarqube_extensions: {}
