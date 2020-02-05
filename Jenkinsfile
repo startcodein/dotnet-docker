@@ -11,7 +11,7 @@ pipeline {
     stages {
         stage('Sanity Check') {
             steps {
-                sh 'echo "Linting"; sleep 1;'
+                sh 'echo "Linting"; sleep 1; ls -l ${PWD}/samples/complexapp/ '
             }
         }
         stage('Unit Test') {
@@ -21,7 +21,7 @@ pipeline {
         }
         stage('Build') {
            steps {
-                sh 'cd ${PWD}/samples/complexapp/tests ; dotnet build -c release --no-restore'
+                sh 'cd ${PWD}/samples/complexapp/tests ;  ls -l ; dotnet build -c release --no-restore'
            }
         }
         stage('CodeAnalysis') {
@@ -31,7 +31,7 @@ pipeline {
         }
         stage('Deliver') {
             steps {
-                sh 'env ; echo this is a dummy step'
+                sh 'env ; cd ${PWD}/samples/complexapp/tests ; dotnet publish -c release --no-build ; ls -l  '
                 }
         }
     }
