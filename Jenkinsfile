@@ -9,12 +9,12 @@ pipeline {
         EMAIL_TO = 'distribution@example.com'
     }
     stages {
-        stage('Sanity Check') {
+        stage('Code Sanity Check') {
             steps {
                 sh 'echo "Linting"; sleep 1; ls -l ${PWD}/samples/complexapp/ '
             }
         }
-        stage('Unit Test') {
+        stage('Functional Testing') {
             steps {
                 sh 'cd  ${PWD}/samples/complexapp/tests ; dotnet test'
             }
@@ -24,12 +24,12 @@ pipeline {
                 sh 'cd ${PWD}/samples/complexapp/ ;  dotnet build -c Release '
            }
         }
-        stage('CodeAnalysis') {
+        stage('Security and Compliance Testing') {
             steps {
                 sh './sonar.sh'
                 }
         }
-        stage('Deliver') {
+        stage('Deployment') {
             steps {
                 sh 'env ; cd ${PWD}/samples/complexapp/; dotnet pack -c Release '
                 }
