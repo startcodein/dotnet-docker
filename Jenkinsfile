@@ -21,7 +21,7 @@ pipeline {
         }
         stage('Build') {
            steps {
-                sh 'cd ${PWD}/samples/complexapp/tests ;  ls -l ; dotnet build -c release --no-restore'
+                sh 'cd ${PWD}/samples/complexapp/ ;  dotnet build -c Release '
            }
         }
         stage('CodeAnalysis') {
@@ -31,13 +31,13 @@ pipeline {
         }
         stage('Deliver') {
             steps {
-                sh 'env ; cd ${PWD}/samples/complexapp/tests ; dotnet pack -o . -c release --no-build ; ls -l  '
+                sh 'env ; cd ${PWD}/samples/complexapp/; dotnet pack -c Release '
                 }
         }
     }
     post {
         always {
-            archiveArtifacts artifacts: '*.nupkg', fingerprint: true
+            archiveArtifacts artifacts: '*/**/complexapp*.nupkg', fingerprint: true
         }
         failure {
             emailext body: 'Check console output at $BUILD_URL to view the results. \n\n ${CHANGES} \n\n -------------------------------------------------- \n${BUILD_LOG, maxLines=100, escapeHtml=false}',
