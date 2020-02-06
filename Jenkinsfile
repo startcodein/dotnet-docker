@@ -38,6 +38,9 @@ pipeline {
     post {
         always {
             archiveArtifacts artifacts: '*/**/complexapp*.nupkg', fingerprint: true
+            emailext body: 'Check console output at $BUILD_URL to view the results. \n\n ${CHANGES} \n\n -------------------------------------------------- \n${BUILD_LOG, maxLines=100, escapeHtml=false}',
+                    to: "${EMAIL_TO}",
+                    subject: 'Build succeeded in Jenkins: $PROJECT_NAME - #$BUILD_NUMBER - $GIT_COMMIT'
         }
         failure {
             emailext body: 'Check console output at $BUILD_URL to view the results. \n\n ${CHANGES} \n\n -------------------------------------------------- \n${BUILD_LOG, maxLines=100, escapeHtml=false}',
